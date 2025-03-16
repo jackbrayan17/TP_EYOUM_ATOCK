@@ -1,0 +1,23 @@
+pipeline {
+    agent any
+
+    stages {
+        stage('Clonage') {
+            steps {
+                git 'https://github.com/jackbrayan17/TP - EYOUM ATOCK J-J B.git'
+            }
+        }
+        stage('Construction de l\'image') {
+            steps {
+                sh 'docker build -t jackbrayan17/eyoum-atock-flask-app .'
+            }
+        }
+        stage('Publication') {
+            steps {
+                withDockerRegistry([credentialsId: 'dockerhub-credentials', url: '']) {
+                    sh 'docker push dockerhub_username/mon_nom-flask-app'
+                }
+            }
+        }
+    }
+}

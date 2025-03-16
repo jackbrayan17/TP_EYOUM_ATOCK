@@ -1,0 +1,41 @@
+mkdir docker-flask-app && cd docker-flask-app
+
+touch Dockerfile
+
+echo "FROM python:3.9
+WORKDIR /app
+COPY app.py /app/
+COPY requirements.txt /app/
+RUN pip install -r requirements.txt
+CMD [\"python\", \"app.py\"]" > Dockerfile
+
+touch app.py
+
+echo "from flask import Flask
+
+app = Flask(__name__)
+
+@app.route('/')
+def home():
+    return 'Bonjour à tous, Ceci est une simple application conteneurisée avec Docker par mon_nom!'
+
+if __name__ == '__main__':
+    app.run(host='0.0.0.0', port=5000)" > app.py
+
+touch requirements.txt
+
+echo "flask" > requirements.txt
+
+docker build -t eyoum-atock-flask-app .
+
+docker images
+
+docker run -d -p 5000:5000 eyoum-atock-flask-app
+
+docker ps
+
+docker login
+
+docker tag eyoum-atock-flask-app jackbrayan17/eyoum-atock-flask-app
+
+docker push jackbrayan17/eyoum-atock-flask-app
